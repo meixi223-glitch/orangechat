@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 橘瓣 OrangeChat
  * 衍生自 RikkaHub (https://github.com/rikkahub/rikkahub)，原作者 RE
  * 本项目基于 GNU AGPL v3 开源，详见根目录 LICENSE 文件
@@ -14,6 +14,7 @@ import me.rerere.rikkahub.data.ai.tools.LocalTools
 import me.rerere.rikkahub.data.event.AppEventBus
 import me.rerere.rikkahub.data.service.MemoryBankService
 import me.rerere.rikkahub.service.ChatService
+import me.rerere.rikkahub.service.KliWakeRuntime
 import me.rerere.rikkahub.utils.EmojiData
 import me.rerere.rikkahub.utils.EmojiUtils
 import me.rerere.rikkahub.utils.JsonInstant
@@ -24,6 +25,7 @@ import me.rerere.tts.provider.TTSManager
 import org.koin.dsl.module
 
 val appModule = module {
+    single { KliWakeRuntime(get(), get(), get<me.rerere.rikkahub.AppScope>()) }
     single<Json> { JsonInstant }
 
     single {

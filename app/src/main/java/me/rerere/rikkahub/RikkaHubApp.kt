@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 橘瓣 OrangeChat
  * 衍生自 RikkaHub (https://github.com/rikkahub/rikkahub)，原作者 RE
  * 本项目基于 GNU AGPL v3 开源，详见根目录 LICENSE 文件
@@ -41,6 +41,7 @@ import me.rerere.rikkahub.data.service.DeviceEventTrackingService
 import me.rerere.rikkahub.data.service.ProactiveMessageService
 import me.rerere.rikkahub.data.service.SupabaseSyncService
 import me.rerere.rikkahub.service.ChatService
+import me.rerere.rikkahub.service.KliWakeRuntime
 import me.rerere.rikkahub.service.WebServerService
 import me.rerere.rikkahub.utils.CrashHandler
 import me.rerere.rikkahub.utils.DatabaseUtil
@@ -77,6 +78,9 @@ class RikkaHubApp : Application() {
             modules(appModule, viewModelModule, dataSourceModule, repositoryModule, pluginModule)
         }
         this.createNotificationChannel()
+        runCatching { get<KliWakeRuntime>().start() }.onFailure { error ->
+            Log.e(TAG, "Failed to start Kli wake runtime", error)
+        }
 
         // 预热 ChatService 单例: 强制在主线程(Application.onCreate 由 Android 保证
         // 在主线程执行, 且先于同一进程内任何 Service/BroadcastReceiver/Activity 回调)

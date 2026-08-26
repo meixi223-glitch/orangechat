@@ -1,4 +1,4 @@
-﻿import com.android.build.api.dsl.Packaging
+import com.android.build.api.dsl.Packaging
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.FileInputStream
@@ -19,8 +19,8 @@ android {
         applicationId = "me.rerere.orangechat"
         minSdk = 26
         targetSdk = 37
-        versionCode = 159
-        versionName = "2.2.3"
+        versionCode = 160
+        versionName = "2.2.3-kli.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -50,6 +50,10 @@ android {
         localProperties.getProperty("storePassword") != null &&
         localProperties.getProperty("keyAlias") != null &&
         localProperties.getProperty("keyPassword") != null
+    val kliWakeUrl = localProperties.getProperty("kliWakeUrl", "")
+    val kliWakeToken = localProperties.getProperty("kliWakeToken", "")
+    val escapedKliWakeUrl = kliWakeUrl.replace("\\", "\\\\").replace("\"", "\\\"")
+    val escapedKliWakeToken = kliWakeToken.replace("\\", "\\\\").replace("\"", "\\\"")
 
     // 构建溯源信息
     val gitCommit = try {
@@ -99,6 +103,8 @@ android {
             buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
             buildConfigField("String", "GIT_COMMIT", "\"$gitCommit\"")
             buildConfigField("String", "BUILD_TIME", "\"$buildTime\"")
+            buildConfigField("String", "KLI_WAKE_URL", "\"$escapedKliWakeUrl\"")
+            buildConfigField("String", "KLI_WAKE_TOKEN", "\"$escapedKliWakeToken\"")
         }
         debug {
             applicationIdSuffix = ".debug"
@@ -109,6 +115,8 @@ android {
             buildConfigField("String", "VERSION_CODE", "\"${android.defaultConfig.versionCode}\"")
             buildConfigField("String", "GIT_COMMIT", "\"$gitCommit\"")
             buildConfigField("String", "BUILD_TIME", "\"$buildTime\"")
+            buildConfigField("String", "KLI_WAKE_URL", "\"$escapedKliWakeUrl\"")
+            buildConfigField("String", "KLI_WAKE_TOKEN", "\"$escapedKliWakeToken\"")
         }
         create("baseline") {
             initWith(getByName("release"))
@@ -121,6 +129,8 @@ android {
             isProfileable = true
             buildConfigField("String", "GIT_COMMIT", "\"$gitCommit\"")
             buildConfigField("String", "BUILD_TIME", "\"$buildTime\"")
+            buildConfigField("String", "KLI_WAKE_URL", "\"$escapedKliWakeUrl\"")
+            buildConfigField("String", "KLI_WAKE_TOKEN", "\"$escapedKliWakeToken\"")
         }
     }
     compileOptions {
